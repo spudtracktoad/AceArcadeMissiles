@@ -64,11 +64,18 @@ public class PlayerDrone : MonoBehaviour
     void Update()
     {
         // Cycle launcher groups.
-        if (Input.GetButtonDown("Fire2"))
+        if (Input.GetButtonDown("Fire3"))
         {
             selectedLauncherGroup++;
             if (selectedLauncherGroup >= 3)
                 selectedLauncherGroup = 0;
+        }
+
+        //select Target
+        if(Input.GetButtonDown("Fire2"))
+        {
+            //Debug.Log("Select Target");
+            GetTarget();
         }
 
         // Fire selected launcher group.
@@ -76,12 +83,16 @@ public class PlayerDrone : MonoBehaviour
         if (selectedLauncherGroup == 2)
         {
             if (Input.GetButton("Fire1"))
+            {
                 FireWeapon();
+            }
         }
         else
         {
             if (Input.GetButtonDown("Fire1"))
+            {
                 FireWeapon();
+            }
         }
 
         // Reset all weapons.
@@ -148,5 +159,29 @@ public class PlayerDrone : MonoBehaviour
         selectMSL.enabled = (selectedLauncherGroup == 0) ? true : false;
         selectXMA.enabled = (selectedLauncherGroup == 1) ? true : false;
         selectRCL.enabled = (selectedLauncherGroup == 2) ? true : false;
+    }
+
+    private void GetTarget()
+    {
+        RaycastHit hitInfo = new RaycastHit();
+        bool hit = Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hitInfo);
+        if (hit)
+        {
+            //Debug.Log("Hit " + hitInfo.transform.gameObject.name + "Tag: " + hitInfo.transform.gameObject.tag);
+            if (hitInfo.transform.gameObject.tag == "Drone")
+            {
+                target = hitInfo.transform;
+                Debug.Log("hitInfo.transform.gameObject.name");
+            }
+            else
+            {
+                //Debug.Log("nopz");
+            }
+        }
+        else
+        {
+            //Debug.Log("No hit");
+        }
+        //Debug.Log("Mouse is down");
     }
 }
